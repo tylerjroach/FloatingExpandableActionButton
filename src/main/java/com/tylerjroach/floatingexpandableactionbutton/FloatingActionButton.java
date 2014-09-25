@@ -62,7 +62,7 @@ public class FloatingActionButton extends ImageButton {
     mColorNormal = getColor(android.R.color.holo_blue_dark);
     mColorPressed = getColor(android.R.color.holo_blue_light);
     mIcon = 0;
-    mSize = SIZE_NORMAL;
+    mSize = SIZE_MINI;
     if (attributeSet != null) {
       initAttributes(context, attributeSet);
     }
@@ -89,7 +89,7 @@ public class FloatingActionButton extends ImageButton {
       try {
         mColorNormal = attr.getColor(R.styleable.FloatingActionButton_colorNormal, getColor(android.R.color.holo_blue_dark));
         mColorPressed = attr.getColor(R.styleable.FloatingActionButton_colorPressed, getColor(android.R.color.holo_blue_light));
-        mSize = attr.getInt(R.styleable.FloatingActionButton_size, SIZE_NORMAL);
+        mSize = attr.getInt(R.styleable.FloatingActionButton_size, SIZE_MINI);
         mIcon = attr.getResourceId(R.styleable.FloatingActionButton_icon, 0);
       } finally {
         attr.recycle();
@@ -126,6 +126,38 @@ public class FloatingActionButton extends ImageButton {
     layerDrawable.setLayerInset(3, iconInsetHorizontal, iconInsetTop, iconInsetHorizontal, iconInsetBottom);
 
     setBackgroundCompat(layerDrawable);
+  }
+
+
+  public void FABChangeIcon(int id) {
+
+      float circleLeft = mShadowRadius;
+      float circleTop = mShadowRadius - mShadowOffset;
+
+      final RectF circleRect = new RectF(circleLeft, circleTop, circleLeft + mCircleSize, circleTop + mCircleSize);
+
+      LayerDrawable layerDrawable = new LayerDrawable(
+              new Drawable[] {
+                      getResources().getDrawable(mSize == SIZE_NORMAL ? R.drawable.fab_bg_normal : R.drawable.fab_bg_mini),
+                      createFillDrawable(circleRect),
+                      createStrokesDrawable(circleRect),
+                      getIconDrawable(id)
+              });
+
+      float iconOffset = (mCircleSize - getDimension(R.dimen.fab_icon_size)) / 2f;
+
+      int iconInsetHorizontal = (int) (mShadowRadius + iconOffset);
+      int iconInsetTop = (int) (circleTop + iconOffset);
+      int iconInsetBottom = (int) (mShadowRadius + mShadowOffset + iconOffset);
+
+      layerDrawable.setLayerInset(3, iconInsetHorizontal, iconInsetTop, iconInsetHorizontal, iconInsetBottom);
+
+      setBackgroundCompat(layerDrawable);
+
+  }
+
+  Drawable getIconDrawable(int id) {
+      return getResources().getDrawable(id);
   }
 
   Drawable getIconDrawable() {
