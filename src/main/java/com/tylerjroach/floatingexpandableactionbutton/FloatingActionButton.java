@@ -32,6 +32,7 @@ public class FloatingActionButton extends ImageButton {
 
   int mColorNormal;
   int mColorPressed;
+  int mColorSelected;
   @DrawableRes
   private int mIcon;
   private int mSize;
@@ -56,6 +57,7 @@ public class FloatingActionButton extends ImageButton {
   void init(Context context, AttributeSet attributeSet) {
     mColorNormal = getColor(android.R.color.holo_blue_dark);
     mColorPressed = getColor(android.R.color.holo_blue_light);
+    mColorSelected = getColor(android.R.color.holo_blue_light);
     mIcon = 0;
     mSize = SIZE_NORMAL;
     if (attributeSet != null) {
@@ -82,8 +84,9 @@ public class FloatingActionButton extends ImageButton {
       try {
         mColorNormal = attr.getColor(R.styleable.FloatingActionButton_colorNormal, getColor(android.R.color.holo_blue_dark));
         mColorPressed = attr.getColor(R.styleable.FloatingActionButton_colorPressed, getColor(android.R.color.holo_blue_light));
+        mColorSelected = attr.getColor(R.styleable.FloatingActionButton_colorSelected, getColor(android.R.color.holo_blue_light));
         mSize = attr.getInt(R.styleable.FloatingActionButton_size, SIZE_NORMAL);
-        mIcon = attr.getResourceId(R.styleable.FloatingActionButton_icon, 0);
+        mIcon = attr.getResourceId(R.styleable.FloatingActionButton_insetIcon, 0);
       } finally {
         attr.recycle();
       }
@@ -157,6 +160,7 @@ public class FloatingActionButton extends ImageButton {
   private StateListDrawable createFillDrawable(RectF circleRect) {
     StateListDrawable drawable = new StateListDrawable();
     drawable.addState(new int[] { android.R.attr.state_pressed }, createCircleDrawable(circleRect, mColorPressed));
+      drawable.addState(new int[] { android.R.attr.state_selected }, createCircleDrawable(circleRect, mColorSelected));
     drawable.addState(new int[] { }, createCircleDrawable(circleRect, mColorNormal));
     return drawable;
   }
